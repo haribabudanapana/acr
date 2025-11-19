@@ -1,0 +1,65 @@
+// Test data for: Verify placeholder message when 'Purchase Date' is not available
+[
+  {
+    "id": 1,
+    "testCaseId": "TCD_FT_04_FR-1",
+    "title": "Verify placeholder message when 'Purchase Date' is not available",
+    "objective": "Ensure that a placeholder or 'Not Available' message is displayed when the purchase date is missing.",
+    "moduleName": null,
+    "submoduleName": null,
+    "priority": "Medium",
+    "type": "Functional",
+    "preconditions": [
+      "User must have access to the MAE UI",
+      "Entitlement details without a purchase date are available"
+    ],
+    "testStepsCount": 196,
+    "expectedResult": "A placeholder or 'Not Available' message is displayed in place of the purchase date.",
+    "postConditions": [
+      "User remains logged in",
+      "UI remains stable"
+    ],
+    "locators": [
+      {
+        "name": "purchaseDateField",
+        "selector": "[data-testid='purchase-date']"
+      },
+      {
+        "name": "entitlementRow",
+        "selector": "[data-testid='entitlement-row']"
+      },
+      {
+        "name": "placeholderText",
+        "selector": "[data-testid='purchase-date-placeholder']"
+      },
+      {
+        "name": "userProfileMenu",
+        "selector": "[data-testid='user-profile-menu']"
+      },
+      {
+        "name": "entitlementDetailsSection",
+        "selector": "[data-testid='entitlement-details-section']"
+      }
+    ],
+    "testData": [
+      {
+        "userName": "testuser_missing_purchasedate",
+        "password": "Test@1234",
+        "entitlementId": "ENT-0001",
+        "entitlementName": "Premium Access",
+        "purchaseDate": null,
+        "expectedPlaceholder": "Not Available",
+        "uiLocale": "en-US",
+        "userRole": "Standard",
+        "accountStatus": "Active",
+        "entitlementStatus": "Active",
+        "edgeCase_purchaseDate": "", // empty string edge case
+        "edgeCase_purchaseDate_future": "2099-12-31", // future date, should not be shown
+        "edgeCase_purchaseDate_invalid": "invalid-date", // invalid format
+        "edgeCase_purchaseDate_null": null, // explicit null
+        "edgeCase_purchaseDate_undefined": undefined // explicit undefined
+      }
+    ],
+    "remarks": "Test covers scenarios where purchase date is missing, empty, invalid, or future. Ensures placeholder is shown in all such cases."
+  }
+]
