@@ -8,8 +8,15 @@ import { testData } from '../../test-data/Staging/testData.json';
 test.describe('Apply multiple Sex at Birth filters - TCD_FT_01_FR-1', () => {
   let loginPage: LoginPage;
   let exploreDataPage: ExploreDataPage;
-  const { username, password } = testData.validUser; // Ensure validUser exists in testData.json
-
+  
+  const {
+  validUser: { username, password },
+  demographicFilters: {
+    sexAtBirth,
+    minAge,
+    race
+  }
+} = testData;
   test.beforeEach(async ({ page }) => {
     loginPage = new LoginPage(page);
     exploreDataPage = new ExploreDataPage(page);
@@ -29,7 +36,7 @@ test.describe('Apply multiple Sex at Birth filters - TCD_FT_01_FR-1', () => {
     await exploreDataPage.selectSexAtBirthOption('Female');
 
     // Step 3: Apply the filter
-    await exploreDataPage.applySexAtBirthFilter();
+    await exploreDataPage.applySexAtBirthFilter(sexAtBirth);
 
     // Step 4: Wait for the demographic data to update
     await exploreDataPage.waitForDemographicDataUpdate();
