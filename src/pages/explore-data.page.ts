@@ -116,3 +116,4 @@ export class ExploreDataPage extends BasePage {
     return appliedFilters;
   }  
 }
+
