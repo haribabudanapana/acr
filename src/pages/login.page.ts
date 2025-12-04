@@ -1,6 +1,7 @@
 import { Page, Locator } from '@playwright/test';
 import { BasePage } from './base.page';
 import { ActionUtils } from '../utils/action-utils';
+import { ENV } from '../config/env';
 
 export class LoginPage extends BasePage {
   private readonly usernameField: Locator;
@@ -12,6 +13,10 @@ export class LoginPage extends BasePage {
     this.usernameField = page.locator('input[name="username"]');
     this.passwordField = page.locator('input[name="password"]');
     this.loginButton = page.locator('button[type="submit"]');
+  }
+
+  async goto(url: string): Promise<void> {
+    await this.page.goto(url);
   }
 
   async login(username: string, password: string): Promise<void> {

@@ -115,5 +115,6 @@ export class ExploreDataPage extends BasePage {
     const appliedFilters = await this.page.$$eval('[data-test-id="applied-sex-at-birth-filter"]', els => els.map(e => e.textContent?.trim() || ''));
     return appliedFilters;
   }  
+
 }
 

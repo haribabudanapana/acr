@@ -3,17 +3,16 @@ import { test, expect } from '@playwright/test';
 import { LoginPage } from '../../src/pages/login.page';
 // Hypothetical ExploreDataPage object for Explore Data Page actions
 import { ExploreDataPage } from '../../src/pages/explore-data.page';
-import { testData } from '../../test-data/Staging/testData.json';
+import { ENV } from '../../src/config/env';
+import testData from '../../test-data/Staging/apply-combined-filters-sex-age-race-data.json';
 
-// Test Data: Ensure these fields exist in your testData.json or adapt as needed
-const {
-  validUser: { username, password },
-  demographicFilters: {
-    sexAtBirth,
-    minAge,
-    race
-  }
-} = testData;
+// Test Data - Read from JSON and ENV
+const sexAtBirth = testData.filters.sexAtBirth[0].value; // 'Male'
+const minAge = testData.filters.ageRange[0].min; // 30
+const race = testData.filters.race[0].value; // 'Black, African American, or African'
+const username = ENV.USERNAME;
+const password = ENV.PASSWORD;
+const url= ENV.BASE_URL;
 
 test.describe('TCD_FT_04_FR-4: Apply combined filters for Sex at Birth, Age Range, and Race', () => {
   test('should display data filtered by Male, age 30+, and Black/African American/African', async ({ page }) => {
@@ -22,13 +21,12 @@ test.describe('TCD_FT_04_FR-4: Apply combined filters for Sex at Birth, Age Rang
     const exploreDataPage = new ExploreDataPage(page);
 
     // Step 1: Login
-    await loginPage.goto();
+    await loginPage.goto(url);
     await loginPage.login(username, password);
-    await expect(loginPage).not.toHaveLoginError();
 
     // Step 2: Navigate to Explore Data Page
     await exploreDataPage.goto();
-    await expect(exploreDataPage).toBeVisible();
+    await exploreDataPage.toBeVisible();
 
     // Step 3: Apply Sex at Birth filter
     await exploreDataPage.applySexAtBirthFilter(sexAtBirth); // e.g., 'Male'

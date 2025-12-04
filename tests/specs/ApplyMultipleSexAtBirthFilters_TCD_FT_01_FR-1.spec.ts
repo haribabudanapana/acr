@@ -1,7 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../../src/pages/login.page';
 import { ExploreDataPage } from '../../src/pages/explore-data.page';
-import { testData } from '../../test-data/Staging/testData.json';
+import { ENV } from '../../src/config/env';
+import testDataArray from '../../test-data/Staging/apply-multiple-sex-at-birth-filters-data.json';
 
 // Test Case: TCD_FT_01_FR-1 - Apply multiple Sex at Birth filters
 
@@ -9,19 +10,18 @@ test.describe('Apply multiple Sex at Birth filters - TCD_FT_01_FR-1', () => {
   let loginPage: LoginPage;
   let exploreDataPage: ExploreDataPage;
   
-  const {
-  validUser: { username, password },
-  demographicFilters: {
-    sexAtBirth,
-    minAge,
-    race
-  }
-} = testData;
+  // Get first test case from array
+  const testData = testDataArray[0];
+  const sexAtBirth = testData.filters.sexAtBirth;
+  const username = ENV.USERNAME;
+  const password = ENV.PASSWORD;
+  const url= ENV.BASE_URL;
+  
   test.beforeEach(async ({ page }) => {
     loginPage = new LoginPage(page);
     exploreDataPage = new ExploreDataPage(page);
     // Login and navigate to Explore Data Page
-    await loginPage.goto();
+    await loginPage.goto(url);
     await loginPage.login(username, password);
     await exploreDataPage.goto();
     await exploreDataPage.waitForLoad();
@@ -36,7 +36,9 @@ test.describe('Apply multiple Sex at Birth filters - TCD_FT_01_FR-1', () => {
     await exploreDataPage.selectSexAtBirthOption('Female');
 
     // Step 3: Apply the filter
-    await exploreDataPage.applySexAtBirthFilter(sexAtBirth);
+    for (const sex of sexAtBirth) {
+      await exploreDataPage.applySexAtBirthFilter(sex);
+    }
 
     // Step 4: Wait for the demographic data to update
     await exploreDataPage.waitForDemographicDataUpdate();
