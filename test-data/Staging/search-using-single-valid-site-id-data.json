@@ -1,0 +1,110 @@
+// Test data for TCD_FT_02_FR-2: Search using a single valid Site ID
+{
+  "testCaseId": "TCD_FT_02_FR-2",
+  "testCaseName": "Search using a single valid Site ID",
+  "objective": "Verify that the system allows searching with a single Site ID and returns the correct results.",
+  "priority": "High",
+  "type": "Functional",
+  "preconditions": [
+    "User is logged into the ALZ-NET Dashboard",
+    "User is on the Explore Data Page"
+  ],
+  "searchCriteria": {
+    "siteId": "SITE123456", // typical valid Site ID
+    "siteIdEdgeCases": [
+      "SITE000001", // lowest valid Site ID (boundary)
+      "SITE999999", // highest valid Site ID (boundary)
+      "SITE000000", // possible invalid/empty edge
+      "SITE!@#$%^", // special characters (negative test)
+      "", // empty string (negative test)
+      "SITE12345678901234567890" // excessively long Site ID (boundary)
+    ]
+  },
+  "expectedResults": {
+    "resultCount": 0,
+    "resultMessage": "Search results are displayed, and the user can analyze the data.",
+    "postConditions": [
+      "Search results are displayed",
+      "User can analyze the data"
+    ]
+  },
+  "locators": {
+    "siteIdInput": "#site-id-input", // Example locator for Site ID input field
+    "searchButton": "#search-btn", // Example locator for Search button
+    "resultsTable": "#results-table", // Example locator for results table
+    "resultsCount": "#results-count", // Example locator for results count
+    "analyzeButton": "#analyze-btn" // Example locator for analyze data button
+  },
+  "testDataItems": [
+    {
+      "label": "Valid Site ID",
+      "value": "SITE123456",
+      "expectedResult": "Results displayed for SITE123456"
+    },
+    {
+      "label": "Lowest Boundary Site ID",
+      "value": "SITE000001",
+      "expectedResult": "Results displayed for SITE000001 or no results if not present"
+    },
+    {
+      "label": "Highest Boundary Site ID",
+      "value": "SITE999999",
+      "expectedResult": "Results displayed for SITE999999 or no results if not present"
+    },
+    {
+      "label": "Empty Site ID",
+      "value": "",
+      "expectedResult": "Validation error or no results"
+    },
+    {
+      "label": "Invalid Site ID (special characters)",
+      "value": "SITE!@#$%^",
+      "expectedResult": "Validation error or no results"
+    },
+    {
+      "label": "Excessively Long Site ID",
+      "value": "SITE12345678901234567890",
+      "expectedResult": "Validation error or no results"
+    },
+    {
+      "label": "Non-existent Site ID",
+      "value": "SITE654321",
+      "expectedResult": "No results found"
+    },
+    {
+      "label": "Site ID with leading/trailing spaces",
+      "value": " SITE123456 ",
+      "expectedResult": "Results displayed for SITE123456 (trimmed)"
+    },
+    {
+      "label": "Site ID with mixed case",
+      "value": "site123456",
+      "expectedResult": "Results displayed for SITE123456 (case-insensitive)"
+    },
+    {
+      "label": "Site ID with numeric only",
+      "value": "123456",
+      "expectedResult": "Validation error or no results"
+    },
+    {
+      "label": "Site ID with prefix only",
+      "value": "SITE",
+      "expectedResult": "Validation error or no results"
+    },
+    {
+      "label": "Site ID with whitespace only",
+      "value": "   ",
+      "expectedResult": "Validation error or no results"
+    },
+    {
+      "label": "Site ID with unicode characters",
+      "value": "SITE测试",
+      "expectedResult": "Validation error or no results"
+    },
+    {
+      "label": "Site ID with dash",
+      "value": "SITE-123456",
+      "expectedResult": "Results displayed for SITE-123456 if valid"
+    }
+  ]
+}
