@@ -1,4 +1,3 @@
-// Test data for TCD_FT_02_FR-2: Select and apply specific age range filter
 {
   "testCaseId": "TCD_FT_02_FR-2",
   "testCaseName": "Select and apply specific age range filter",
