@@ -1,3 +1,4 @@
+
 import { Page } from '@playwright/test';
 import { BasePage } from './base.page';
 
@@ -5,18 +6,15 @@ export class ExploreDataPage extends BasePage {
   constructor(page: Page) {
     super(page);
   }
-
   async openAgeRangeFilter() {
     // Implement logic to open the age range filter dropdown/panel
     await this.page.click('[data-testid="age-range-filter"]');
   }
-
   async setAgeRange(min: number, max: number) {
     // Implement logic to set the minimum and maximum age in the filter
     await this.page.fill('[data-testid="age-range-min"]', min.toString());
     await this.page.fill('[data-testid="age-range-max"]', max.toString());
   }
-
   async getDisplayedAges(): Promise<number[]> {
     // Implement logic to extract all displayed ages from the demographic data table/list
     const ageElements = await this.page.$$('[data-testid="demographic-age-value"]');
@@ -172,5 +170,40 @@ export class ExploreDataPage extends BasePage {
   }
   async isResultsListDisplayed(): Promise<boolean> {
     return this.page.locator('[data-testid="explore-data-results-list"]').isVisible();
+
+  }
+
+  async enterSiteId(siteId: string) {
+    // Fill the Site ID input field
+    await this.page.getByTestId('site-id-input').fill(siteId);
+  }
+
+  async clickSearchButton() {
+    // Click the search button
+    await this.page.getByTestId('search-button').click();
+  }
+
+  async waitForSearchResults() {
+    // Wait for the results table or section to appear
+    await this.page.getByTestId('search-results').waitFor({ state: 'visible' });
+  }
+
+  async getSearchResults(): Promise<Array<{ siteId: string }>> {
+    // Extracts search results from the table
+    // (Assume each row has data-site-id attribute or similar)
+    const rows = await this.page.locator('[data-testid="search-result-row"]').elementHandles();
+    const results = [];
+    for (const row of rows) {
+      const siteId = await row.getAttribute('data-site-id');
+      if (siteId !== null) {
+        results.push({ siteId });
+      }
+    }
+    return results;
+  }
+
+  async isDataAnalysisSectionVisible(): Promise<boolean> {
+    // Checks if the data analysis section is visible
+    return await this.page.getByTestId('data-analysis-section').isVisible();
   }
 }
