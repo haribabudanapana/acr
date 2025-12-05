@@ -1,22 +1,24 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../../src/pages/login.page';
 import { ExploreDataPage } from '../../src/pages/explore-data.page';
-import { testData } from '../../test-data/Staging/testData.json';
-
+import testDataArray from '../../test-data/Staging/search-using-single-valid-case-id-data.json';
+import {ENV} from '../../src/config/env.ts';
 // Test Case: TCD_FT_01_FR-1 - Search using a single valid Case ID
 // Objective: Verify that the system allows searching with a single Case ID and returns the correct results.
 
 test.describe('TCD_FT_01_FR-1: Search using a single valid Case ID', () => {
   let loginPage: LoginPage;
   let exploreDataPage: ExploreDataPage;
-  const validCaseId = 'C123'; // This could be parameterized from testData if needed
-  
+  const validCaseId = testDataArray[0].searchInput.caseId; // This could be parameterized from testData if needed
+  const url=ENV.BASE_URL; 
+  const username=ENV.USERNAME;
+  const password=ENV.PASSWORD;
   test.beforeEach(async ({ page }) => {
     loginPage = new LoginPage(page);
     exploreDataPage = new ExploreDataPage(page);
     // Login using credentials from test data
-    await loginPage.goto();
-    await loginPage.login(testData.validUser.username, testData.validUser.password);
+    await loginPage.goto(url);
+    await loginPage.login(username,password);
     // Navigate to Explore Data Page
     await exploreDataPage.goto();
     await expect(exploreDataPage.isLoaded()).resolves.toBeTruthy();
