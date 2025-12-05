@@ -47,7 +47,6 @@ test.describe('TCD_FT_02_FR-2: Search using a single valid Site ID', () => {
     for (const result of results) {
       expect(result.siteId).toBe(validSiteId);
     }
-
     // Step 5: Optionally, verify that user can analyze the data (e.g., charts, tables are visible)
     await expect(await exploreDataPage.isDataAnalysisSectionVisible()).toBeTruthy();
   });
