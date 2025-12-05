@@ -1,0 +1,122 @@
+{
+  "testCaseId": "TCD_FT_02_FR-2",
+  "testCaseName": "Select and apply specific age range filter",
+  "objective": "To ensure users can filter demographic data by a specific age range",
+  "preconditions": [
+    "User is logged into the ALZ-NET Dashboard",
+    "User is on the Explore Data Page"
+  ],
+  "priority": "High",
+  "type": "Functional",
+  "locators": [
+    {
+      "name": "ageRangeFilterInput",
+      "selector": "#age-range-filter-input"
+    },
+    {
+      "name": "ageRangeApplyButton",
+      "selector": "#apply-age-range-btn"
+    },
+    {
+      "name": "demographicDataTable",
+      "selector": "#demographic-data-table"
+    },
+    {
+      "name": "ageRangeMinInput",
+      "selector": "#age-range-min"
+    },
+    {
+      "name": "ageRangeMaxInput",
+      "selector": "#age-range-max"
+    }
+  ],
+  "testData": [
+    {
+      "description": "Valid age range within bounds",
+      "minAge": 27,
+      "maxAge": 50,
+      "expectedResult": "Demographic data for ages between 27 and 50 is displayed"
+    },
+    {
+      "description": "Lower boundary value",
+      "minAge": 27,
+      "maxAge": 27,
+      "expectedResult": "Demographic data for age 27 only is displayed"
+    },
+    {
+      "description": "Upper boundary value",
+      "minAge": 50,
+      "maxAge": 50,
+      "expectedResult": "Demographic data for age 50 only is displayed"
+    },
+    {
+      "description": "Full allowed range",
+      "minAge": 18,
+      "maxAge": 99,
+      "expectedResult": "Demographic data for ages between 18 and 99 is displayed"
+    },
+    {
+      "description": "Min age below allowed",
+      "minAge": 10,
+      "maxAge": 50,
+      "expectedResult": "Error or no results; min age below allowed boundary"
+    },
+    {
+      "description": "Max age above allowed",
+      "minAge": 27,
+      "maxAge": 120,
+      "expectedResult": "Error or no results; max age above allowed boundary"
+    },
+    {
+      "description": "Min age greater than max age",
+      "minAge": 55,
+      "maxAge": 50,
+      "expectedResult": "Error message: Min age cannot be greater than max age"
+    },
+    {
+      "description": "Non-numeric min age",
+      "minAge": "abc",
+      "maxAge": 50,
+      "expectedResult": "Error message: Please enter a valid number for min age"
+    },
+    {
+      "description": "Non-numeric max age",
+      "minAge": 27,
+      "maxAge": "xyz",
+      "expectedResult": "Error message: Please enter a valid number for max age"
+    },
+    {
+      "description": "Empty min age",
+      "minAge": "",
+      "maxAge": 50,
+      "expectedResult": "Error message: Min age is required"
+    },
+    {
+      "description": "Empty max age",
+      "minAge": 27,
+      "maxAge": "",
+      "expectedResult": "Error message: Max age is required"
+    },
+    {
+      "description": "Special characters in min age",
+      "minAge": "@#%",
+      "maxAge": 50,
+      "expectedResult": "Error message: Please enter a valid number for min age"
+    },
+    {
+      "description": "Special characters in max age",
+      "minAge": 27,
+      "maxAge": "!$*",
+      "expectedResult": "Error message: Please enter a valid number for max age"
+    },
+    {
+      "description": "No results for given range",
+      "minAge": 90,
+      "maxAge": 95,
+      "expectedResult": "No demographic data found for ages between 90 and 95"
+    }
+  ],
+  "postConditions": [
+    "Age range filter remains until user changes it"
+  ]
+}

@@ -1,0 +1,127 @@
+[
+  {
+    "testCaseId": "TCD_FT_01_FR-1",
+    "description": "Verify that selecting both 'Male' and 'Female' in the Sex at Birth filter displays the correct demographic data.",
+    "preconditions": [
+      "User is logged into the ALZ-NET Dashboard",
+      "User is on the Explore Data Page"
+    ],
+    "filters": {
+      "sexAtBirth": [
+        "Male",
+        "Female"
+      ]
+    },
+    "expectedResult": "The system displays demographic data filtered by both 'Male' and 'Female' selections.",
+    "postConditions": [
+      "Filters remain applied until user changes them"
+    ],
+    "priority": "High",
+    "type": "Functional",
+    "locators": [
+      {
+        "name": "sexAtBirthFilterDropdown",
+        "selector": "#sex-at-birth-filter-dropdown"
+      },
+      {
+        "name": "sexAtBirthMaleCheckbox",
+        "selector": "input[name='sex-at-birth'][value='Male']"
+      },
+      {
+        "name": "sexAtBirthFemaleCheckbox",
+        "selector": "input[name='sex-at-birth'][value='Female']"
+      },
+      {
+        "name": "applyFiltersButton",
+        "selector": "button[data-testid='apply-filters']"
+      },
+      {
+        "name": "demographicDataTable",
+        "selector": "#demographic-data-table"
+      }
+    ],
+    "testData": [
+      {
+        "sexAtBirth": "Male",
+        "expectedCount": 120,
+        "edgeCase": false
+      },
+      {
+        "sexAtBirth": "Female",
+        "expectedCount": 130,
+        "edgeCase": false
+      },
+      {
+        "sexAtBirth": ["Male", "Female"],
+        "expectedCount": 250,
+        "edgeCase": false
+      },
+      {
+        "sexAtBirth": "Other",
+        "expectedCount": 0,
+        "edgeCase": true,
+        "note": "Boundary: No data for 'Other' selection"
+      },
+      {
+        "sexAtBirth": [],
+        "expectedCount": 250,
+        "edgeCase": true,
+        "note": "Boundary: No filter applied, all data displayed"
+      },
+      {
+        "sexAtBirth": ["Male", "Female", "Other"],
+        "expectedCount": 250,
+        "edgeCase": true,
+        "note": "Boundary: All options selected, all data displayed"
+      },
+      {
+        "sexAtBirth": "Male",
+        "expectedCount": 0,
+        "edgeCase": true,
+        "note": "Negative: No data available for 'Male' (simulate empty result)"
+      },
+      {
+        "sexAtBirth": "Female",
+        "expectedCount": 0,
+        "edgeCase": true,
+        "note": "Negative: No data available for 'Female' (simulate empty result)"
+      },
+      {
+        "sexAtBirth": ["Male", "Female"],
+        "expectedCount": 0,
+        "edgeCase": true,
+        "note": "Negative: No data available for both 'Male' and 'Female' (simulate empty result)"
+      },
+      {
+        "sexAtBirth": "",
+        "expectedCount": 250,
+        "edgeCase": true,
+        "note": "Boundary: Empty string as filter, all data displayed"
+      },
+      {
+        "sexAtBirth": null,
+        "expectedCount": 250,
+        "edgeCase": true,
+        "note": "Boundary: Null as filter, all data displayed"
+      },
+      {
+        "sexAtBirth": ["Male", "Unknown"],
+        "expectedCount": 120,
+        "edgeCase": true,
+        "note": "Unknown value ignored, only 'Male' data displayed"
+      },
+      {
+        "sexAtBirth": ["Female", "Unknown"],
+        "expectedCount": 130,
+        "edgeCase": true,
+        "note": "Unknown value ignored, only 'Female' data displayed"
+      },
+      {
+        "sexAtBirth": ["Unknown"],
+        "expectedCount": 0,
+        "edgeCase": true,
+        "note": "Unknown value, no data displayed"
+      }
+    ]
+  }
+]

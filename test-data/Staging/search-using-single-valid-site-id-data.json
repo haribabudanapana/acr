@@ -1,4 +1,3 @@
-// Test data for TCD_FT_02_FR-2: Search using a single valid Site ID
 {
   "testCaseId": "TCD_FT_02_FR-2",
   "testCaseName": "Search using a single valid Site ID",
@@ -10,14 +9,14 @@
     "User is on the Explore Data Page"
   ],
   "searchCriteria": {
-    "siteId": "SITE123456", // typical valid Site ID
+    "siteId": "SITE123456", 
     "siteIdEdgeCases": [
-      "SITE000001", // lowest valid Site ID (boundary)
-      "SITE999999", // highest valid Site ID (boundary)
-      "SITE000000", // possible invalid/empty edge
-      "SITE!@#$%^", // special characters (negative test)
-      "", // empty string (negative test)
-      "SITE12345678901234567890" // excessively long Site ID (boundary)
+      "SITE000001", 
+      "SITE999999", 
+      "SITE000000", 
+      "SITE!@#$%^", 
+      "", 
+      "SITE12345678901234567890" 
     ]
   },
   "expectedResults": {
@@ -29,11 +28,10 @@
     ]
   },
   "locators": {
-    "siteIdInput": "#site-id-input", // Example locator for Site ID input field
-    "searchButton": "#search-btn", // Example locator for Search button
-    "resultsTable": "#results-table", // Example locator for results table
-    "resultsCount": "#results-count", // Example locator for results count
-    "analyzeButton": "#analyze-btn" // Example locator for analyze data button
+    "siteIdInput": "#site-id-input", 
+    "resultsTable": "#results-table", 
+    "resultsCount": "#results-count", 
+    "analyzeButton": "#analyze-btn" 
   },
   "testDataItems": [
     {

@@ -1,0 +1,116 @@
+[
+  {
+    "testCaseId": "TCD_FT_01_FR-1",
+    "testCaseName": "Search using a single valid Case ID",
+    "objective": "Verify that the system allows searching with a single Case ID and returns the correct results.",
+    "priority": "High",
+    "type": "Functional Testing (Positive test case)",
+    "preconditions": [
+      "User is logged into the ALZ-NET Dashboard",
+      "User is on the Explore Data Page"
+    ],
+    "searchInput": {
+      "caseId": "C123"
+    },
+    "expectedResults": {
+      "subjectsFound": 1,
+      "subjectList": [
+        {
+          "caseId": "C123",
+          "subjectId": "S001",
+          "firstName": "John",
+          "lastName": "Doe",
+          "age": 67,
+          "gender": "Male",
+          "diagnosis": "Alzheimer's Disease",
+          "enrollmentDate": "2022-01-15",
+          "status": "Active"
+        }
+      ],
+      "message": "1 subject found for Case ID 'C123'"
+    },
+    "locators": {
+      "caseIdInput": "#case-id-input",
+      "searchButton": "#search-btn",
+      "resultsTable": "#results-table",
+      "subjectRow": ".subject-row",
+      "noResultsMessage": "#no-results-msg"
+    },
+    "testDataItems": [
+      {
+        "label": "Valid Case ID",
+        "value": "C123",
+        "description": "Standard valid Case ID for positive test"
+      },
+      {
+        "label": "Boundary Case ID (Min Length)",
+        "value": "C1",
+        "description": "Minimum valid Case ID length"
+      },
+      {
+        "label": "Boundary Case ID (Max Length)",
+        "value": "C12345678901234567890",
+        "description": "Maximum valid Case ID length (20 chars)"
+      },
+      {
+        "label": "Case ID with Special Characters",
+        "value": "C123-AB_01",
+        "description": "Case ID containing dashes and underscores"
+      },
+      {
+        "label": "Case ID with Lowercase",
+        "value": "c123",
+        "description": "Case ID in lowercase (should be case-insensitive)"
+      },
+      {
+        "label": "Case ID with Leading/Trailing Spaces",
+        "value": "  C123  ",
+        "description": "Case ID with spaces to test trimming"
+      },
+      {
+        "label": "Non-existent Case ID",
+        "value": "C999",
+        "description": "Case ID that does not exist in the system"
+      },
+      {
+        "label": "Empty Case ID",
+        "value": "",
+        "description": "Empty input to test required validation"
+      },
+      {
+        "label": "Null Case ID",
+        "value": null,
+        "description": "Null input to test system handling"
+      },
+      {
+        "label": "Case ID with SQL Injection",
+        "value": "C123' OR '1'='1",
+        "description": "Test for SQL injection vulnerability"
+      },
+      {
+        "label": "Case ID with XSS",
+        "value": "<script>alert('xss')</script>",
+        "description": "Test for XSS vulnerability"
+      },
+      {
+        "label": "Case ID with Unicode Characters",
+        "value": "C123Ω≈ç√∫˜µ≤≥÷",
+        "description": "Test for Unicode/UTF-8 handling"
+      },
+      {
+        "label": "Case ID with Only Numbers",
+        "value": "123",
+        "description": "Case ID without prefix letter(s)"
+      },
+      {
+        "label": "Case ID with Only Letters",
+        "value": "CASEID",
+        "description": "Case ID with only letters"
+      }
+    ],
+    "postConditions": [
+      "Search results are displayed",
+      "User can analyze the data"
+    ]
+  }
+]

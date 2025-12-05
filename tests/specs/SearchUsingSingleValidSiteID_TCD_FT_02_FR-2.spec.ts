@@ -3,34 +3,31 @@
 
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../../src/pages/login.page';
-import { EntitlementsPage } from '../../src/pages/entitlements.page';
-import { testData } from '../../test-data/Staging/testData.json';
-
+import testDataArray from '../../test-data/Staging/search-using-single-valid-site-id-data.json';
+import {ENV} from '../../src/config/env.ts';
+const testData = testDataArray;
 // NOTE: If an ExploreDataPage page object does not exist, it should be created in src/pages/explore-data.page.ts
 // For this test, we will assume it exists and exposes the necessary methods.
 import { ExploreDataPage } from '../../src/pages/explore-data.page';
 
 // Test Data: Site IDs and user credentials
-const validSiteId = testData.singleValidSiteId || 'SITE12345'; // fallback if not present
-const username = testData.validUser?.username || 'testuser';
-const password = testData.validUser?.password || 'password123';
+const url=ENV.BASE_URL;
+const validSiteId = testData.searchCriteria.siteId || 'SITE12345'; // fallback if not present
+const username = ENV.USERNAME
+const password = ENV.PASSWORD
 
 // Main test
 test.describe('TCD_FT_02_FR-2: Search using a single valid Site ID', () => {
   let loginPage: LoginPage;
-  let entitlementsPage: EntitlementsPage;
   let exploreDataPage: ExploreDataPage;
 
   test.beforeEach(async ({ page }) => {
     loginPage = new LoginPage(page);
-    entitlementsPage = new EntitlementsPage(page);
     exploreDataPage = new ExploreDataPage(page);
 
     // Login and navigate to Explore Data page
-    await loginPage.goto();
+    await loginPage.goto(url);
     await loginPage.login(username, password);
-    // Optionally, handle entitlements if required
-    await entitlementsPage.handleEntitlementsIfPresent();
     await exploreDataPage.goto();
   });
 
