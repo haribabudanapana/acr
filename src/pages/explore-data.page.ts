@@ -170,7 +170,6 @@ export class ExploreDataPage extends BasePage {
     const caseIdElements = await this.page.locator('[data-testid="case-id-cell"]').allTextContents();
     return caseIdElements.map(text => text.trim());
   }
-
   async isResultsListDisplayed(): Promise<boolean> {
     return this.page.locator('[data-testid="explore-data-results-list"]').isVisible();
   }
