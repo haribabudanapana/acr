@@ -141,7 +141,6 @@ export class ExploreDataPage extends BasePage {
       sexAtBirth: sexAtBirthValues
     };
   }
-
   async getAppliedSexAtBirthFilters() {
     // Returns the currently applied Sex at Birth filters
     const appliedFilters = await this.page.$$eval('[data-test-id="applied-sex-at-birth-filter"]', els => els.map(e => e.textContent?.trim() || ''));
