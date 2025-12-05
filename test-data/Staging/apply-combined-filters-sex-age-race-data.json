@@ -1,0 +1,186 @@
+{
+  "testCaseId": "TCD_FT_04_FR-4",
+  "testCaseName": "Apply combined filters for Sex at Birth, Age Range, and Race",
+  "objective": "To validate that the system supports combined filtering for multiple demographics criteria",
+  "priority": "High",
+  "type": "Functional Testing (Positive test case)",
+  "preconditions": [
+    "User is logged into the ALZ-NET Dashboard",
+    "User is on the Explore Data Page"
+  ],
+  "filters": {
+    "sexAtBirth": [
+      {
+        "value": "Male",
+        "locator": "#sexAtBirth-male"
+      },
+      {
+        "value": "Female",
+        "locator": "#sexAtBirth-female"
+      },
+      {
+        "value": "Other",
+        "locator": "#sexAtBirth-other"
+      }
+    ],
+    "ageRange": [
+      {
+        "label": "30 and above",
+        "min": 30,
+        "max": null,
+        "locator": "#ageRange-30plus"
+      },
+      {
+        "label": "30",
+        "min": 30,
+        "max": 30,
+        "locator": "#ageRange-30"
+      },
+      {
+        "label": "29",
+        "min": 29,
+        "max": 29,
+        "locator": "#ageRange-29"
+      }
+    ],
+    "race": [
+      {
+        "value": "Black, African American, or African",
+        "locator": "#race-black-african-american-african"
+      },
+      {
+        "value": "White",
+        "locator": "#race-white"
+      },
+      {
+        "value": "Asian",
+        "locator": "#race-asian"
+      }
+    ]
+  },
+  "expectedResults": [
+    {
+      "description": "System displays demographic data filtered by 'Male', age 30 and above, and 'Black, African American, or African' race",
+      "expectedCount": 0
+    },
+    {
+      "description": "System displays demographic data filtered by 'Male', age 30, and 'Black, African American, or African' race (boundary value)",
+      "expectedCount": 0
+    },
+    {
+      "description": "System displays demographic data filtered by 'Male', age 29, and 'Black, African American, or African' race (below boundary)",
+      "expectedCount": 0
+    }
+  ],
+  "postConditions": [
+    "Combined filters remain applied until user changes them"
+  ],
+  "locators": [
+    {
+      "name": "sexAtBirthFilter",
+      "locator": "#sexAtBirth-filter"
+    },
+    {
+      "name": "ageRangeFilter",
+      "locator": "#ageRange-filter"
+    },
+    {
+      "name": "raceFilter",
+      "locator": "#race-filter"
+    },
+    {
+      "name": "applyFiltersButton",
+      "locator": "#apply-filters-btn"
+    },
+    {
+      "name": "resultsCount",
+      "locator": "#results-count"
+    }
+  ],
+  "testData": [
+    {
+      "sexAtBirth": "Male",
+      "age": 30,
+      "race": "Black, African American, or African",
+      "expectedCount": 0
+    },
+    {
+      "sexAtBirth": "Male",
+      "age": 45,
+      "race": "Black, African American, or African",
+      "expectedCount": 0
+    },
+    {
+      "sexAtBirth": "Male",
+      "age": 60,
+      "race": "Black, African American, or African",
+      "expectedCount": 0
+    },
+    {
+      "sexAtBirth": "Male",
+      "age": 29,
+      "race": "Black, African American, or African",
+      "expectedCount": 0
+    },
+    {
+      "sexAtBirth": "Male",
+      "age": 30,
+      "race": "White",
+      "expectedCount": 0
+    },
+    {
+      "sexAtBirth": "Female",
+      "age": 30,
+      "race": "Black, African American, or African",
+      "expectedCount": 0
+    },
+    {
+      "sexAtBirth": "Other",
+      "age": 30,
+      "race": "Black, African American, or African",
+      "expectedCount": 0
+    },
+    {
+      "sexAtBirth": "Male",
+      "age": 29,
+      "race": "White",
+      "expectedCount": 0
+    },
+    {
+      "sexAtBirth": "Male",
+      "age": 31,
+      "race": "Black, African American, or African",
+      "expectedCount": 0
+    },
+    {
+      "sexAtBirth": "Male",
+      "age": 30,
+      "race": "Asian",
+      "expectedCount": 0
+    },
+    {
+      "sexAtBirth": "Female",
+      "age": 29,
+      "race": "Black, African American, or African",
+      "expectedCount": 0
+    },
+    {
+      "sexAtBirth": "Other",
+      "age": 45,
+      "race": "Black, African American, or African",
+      "expectedCount": 0
+    },
+    {
+      "sexAtBirth": "Male",
+      "age": 65,
+      "race": "Black, African American, or African",
+      "expectedCount": 0
+    },
+    {
+      "sexAtBirth": "Male",
+      "age": 30,
+      "race": "Black, African American, or African",
+      "expectedCount": 0
+    }
+  ]
+}
