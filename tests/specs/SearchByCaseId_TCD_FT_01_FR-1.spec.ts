@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { LoginPage } from '../../src/pages/login.page';
 import { ExploreDataPage } from '../../src/pages/explore-data.page';
 import testDataArray from '../../test-data/Staging/search-using-single-valid-case-id-data.json';
-import {ENV} from '../../src/config/env.ts';
+import {ENV} from '../../src/config/env';
 // Test Case: TCD_FT_01_FR-1 - Search using a single valid Case ID
 // Objective: Verify that the system allows searching with a single Case ID and returns the correct results.
 
@@ -32,9 +32,7 @@ test.describe('TCD_FT_01_FR-1: Search using a single valid Case ID', () => {
     // Wait for results to load
     await exploreDataPage.waitForResults();
     // Assert that the results contain the expected Case ID
-    const results = await exploreDataPage.getResultsCaseIds();
-    expect(results).toContain(validCaseId);
-    // Optionally, check that the results list is displayed
-    expect(await exploreDataPage.isResultsListDisplayed()).toBeTruthy();
+    const results = await exploreDataPage.hasCaseId(validCaseId);
+    expect(results).toBeTruthy();
   });
 });

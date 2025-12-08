@@ -1,7 +1,8 @@
 
-import { Page } from '@playwright/test';
+import { Page,expect } from '@playwright/test';
 import { BasePage } from './base.page';
 
+let casesCount: number;
 export class ExploreDataPage extends BasePage {
   constructor(page: Page) {
     super(page);
@@ -11,9 +12,49 @@ export class ExploreDataPage extends BasePage {
     await this.page.click('[data-testid="age-range-filter"]');
   }
   async setAgeRange(min: number, max: number) {
-    // Implement logic to set the minimum and maximum age in the filter
-    await this.page.fill('[data-testid="age-range-min"]', min.toString());
-    await this.page.fill('[data-testid="age-range-max"]', max.toString());
+    // Wait for the age selector to be visible
+    const ageSelector = this.page.locator('.age-selector');
+    await ageSelector.waitFor({ state: 'visible' });
+    
+    // Check if "Age Range" toggle is enabled (checkbox should be checked)
+    const toggleCheckbox = ageSelector.locator('.toggle-row input[type="checkbox"]');
+    const isChecked = await toggleCheckbox.isChecked();
+    
+    // If toggle is off, click it to enable "Age Range" mode
+    if (!isChecked) {
+      await toggleCheckbox.click();
+      await this.page.waitForTimeout(500); // Wait for slider to render
+    }
+    
+    // Locate the slider handles using aria attributes for better stability
+    const minHandle = ageSelector.locator('[role="slider"][aria-label="ngx-slider"]');
+    const maxHandle = ageSelector.locator('[role="slider"][aria-label="ngx-slider-max"]');
+    await minHandle.waitFor({ state: 'visible' });
+    await maxHandle.waitFor({ state: 'visible' });
+    
+    // Get the slider bar dimensions to calculate proportional positions
+    const sliderBar = ageSelector.locator('.ngx-slider-full-bar');
+    await sliderBar.waitFor({ state: 'visible' });
+    const box = await sliderBar.boundingBox();
+    
+    if (box) {
+      const sliderWidth = box.width;
+      const sliderLeft = box.x;
+      
+      // Calculate positions for min and max (range is 1-100)
+      const minPosition = sliderLeft + (sliderWidth * (min - 1) / 99);
+      const maxPosition = sliderLeft + (sliderWidth * (max - 1) / 99);
+      
+      // Drag min handle to set minimum age
+      await minHandle.dragTo(sliderBar, { 
+        targetPosition: { x: Math.round(minPosition) - sliderLeft, y: 0 } 
+      });
+      
+      // Drag max handle to set maximum age
+      await maxHandle.dragTo(sliderBar, { 
+        targetPosition: { x: Math.round(maxPosition) - sliderLeft, y: 0 } 
+      });
+    }
   }
   async getDisplayedAges(): Promise<number[]> {
     // Implement logic to extract all displayed ages from the demographic data table/list
@@ -39,7 +80,9 @@ export class ExploreDataPage extends BasePage {
   }
 
   async goto() {
-    await this.page.goto('/explore-data');
+    await this.page.click('//div[contains(@class,"nav-buttons")]/descendant::button[contains(text(),"Explore Data")]');
+    await this.page.waitForLoadState('networkidle');
+
   }
 
   async toBeVisible() {
@@ -48,37 +91,73 @@ export class ExploreDataPage extends BasePage {
   }
 
   async applySexAtBirthFilter(sex: string) {
-    // Interact with the Sex at Birth filter dropdown or buttons
-    // Example: await this.page.click(`[data-testid="filter-sex-${sex.toLowerCase()}"]`);
-    // Replace with actual implementation
-    await this.page.selectOption('[data-testid="filter-sex-dropdown"]', { label: sex });
+    // Click the custom dropdown to open options
+    const customSelectBox = this.page.locator('.custom-select-box').filter({ hasText: 'Select Options' });
+    await customSelectBox.waitFor({ state: 'visible' });
+    await customSelectBox.click();
+    
+    // Wait for the dropdown options to appear and click the sex option
+    const option = this.page.locator('text=' + sex);
+    await option.waitFor({ state: 'visible' });
+    await option.click();
   }
 
   async applyAgeRangeFilter(minAge: number) {
-    // Interact with the Age Range filter (e.g., slider or input)
-    // Example: await this.page.fill('[data-testid="filter-age-min"]', String(minAge));
-    await this.page.fill('[data-testid="filter-age-min"]', String(minAge));
-    // Optionally, trigger filter apply
-    await this.page.click('[data-testid="filter-age-apply"]');
+    // Locate the minimum age slider handle
+    const minHandle = this.page.locator('.ngx-slider-pointer-min');
+    await minHandle.waitFor({ state: 'visible' });
+    
+    // Drag the slider to set the minimum age value
+    // The slider ranges from 1-100, so we calculate the position proportionally
+    const sliderBar = this.page.locator('.ngx-slider-selection-bar');
+    await sliderBar.waitFor({ state: 'visible' });
+    
+    // Get slider dimensions to calculate the target position
+    const box = await sliderBar.boundingBox();
+    if (box) {
+      const sliderWidth = box.width;
+      const minPosition = box.x + (sliderWidth * (minAge - 1) / 99); // Normalize to 0-99 range
+      await minHandle.dragTo(this.page.locator('.ngx-slider-bar'), { targetPosition: { x: Math.round(minPosition), y: 0 } });
+    }
   }
 
   async applyRaceFilter(race: string) {
-    // Interact with the Race filter (e.g., multi-select or dropdown)
-    await this.page.selectOption('[data-testid="filter-race-dropdown"]', { label: race });
+    // Click the custom dropdown to open options
+    const customSelectBox = this.page.locator('.custom-select-box').filter({ hasText: 'Select Options' });
+    await customSelectBox.waitFor({ state: 'visible' });
+    await customSelectBox.click();
+    
+    // Wait for the dropdown options to appear and click the race option
+    const option = this.page.locator('text=' + race);
+    await option.waitFor({ state: 'visible' });
+    await option.click();
   }
 
   async waitForFiltersToApply() {
-    // Wait for loading indicator to disappear or results to update
-    await this.page.waitForSelector('[data-testid="loading-indicator"]', { state: 'detached' });
+    // Wait for the demographic data or results section to be visible indicating filters have been applied
+    // First, wait a brief moment for any loading to start
+    await this.page.waitForTimeout(500);
+
+    
+    // Then wait for the results to be visible (demographic data or results table)
+    const demographicResults = this.page.locator('[data-testid="demographic-row"], [data-testid="search-results"], table.table tbody tr');
+    await demographicResults.first().waitFor({ state: 'visible', timeout: 10000 }).catch(() => {
+      // If no specific results found, just wait for page to stabilize
+      return this.page.waitForLoadState('networkidle');
+    });
   }
 
   async getFilteredDemographicResults() {
-    // Fetch filtered demographic data from the UI
-    // Example: read values from summary cards or results table
-    const sexAtBirth = await this.page.textContent('[data-testid="result-sex"]');
-    const minAge = Number(await this.page.textContent('[data-testid="result-min-age"]'));
-    const race = await this.page.textContent('[data-testid="result-race"]');
-    return { sexAtBirth, minAge, race };
+    // Fetch filtered demographic data from the results table
+    // Get the first row of data from the table
+    const firstRow = this.page.locator('table.table tbody tr').first();
+    await firstRow.waitFor({ state: 'visible' });
+    
+    // Extract Race from column 6 (Participant Race)
+    const raceCell = firstRow.locator('td:nth-child(6)');
+    const race = (await raceCell.textContent())?.trim() || '';
+    
+    return { race };
   }
 
   async areOnlyExpectedResultsDisplayed(filters: { sexAtBirth: string, minAge: number, race: string }) {
@@ -152,21 +231,46 @@ export class ExploreDataPage extends BasePage {
   }
 
   async enterCaseId(caseId: string) {
-    await this.page.locator('[data-testid="explore-data-search-field"]').fill(caseId);
+    // Click the "Case ID" filter button to open the dropdown
+    const caseIdButton = this.page.locator('button:has-text("Case ID")').filter({ has: this.page.locator('[class*="filter-button"]') });
+    await caseIdButton.waitFor({ state: 'visible' });
+    await caseIdButton.click();
+    
+    // Wait for and fill the Case ID input field
+    const caseIdInput = this.page.locator('input[formcontrolname="caseId"]');
+    await caseIdInput.waitFor({ state: 'visible' });
+    await caseIdInput.fill(caseId);
   }
 
   async clickSearch() {
-    await this.page.locator('[data-testid="explore-data-search-button"]').click();
+    await this.page.locator('//*[contains(@class,"ci-add-plus")]').click();
+    // Locate the Search button using XPath
+  const searchButton = this.page.locator("//button[contains(text(),'Search')]");
+
+  // Verify the element is visible
+  await expect(searchButton).toBeVisible();
+
+  // Click the Search button
+  await searchButton.click();
+
   }
 
   async waitForResults() {
-    await this.page.waitForSelector('[data-testid="explore-data-results-list"]');
-  }
+    // Locate the span element
+  const element = this.page.locator("//span[contains(@class,'TotalCountValue')]");
 
-  async getResultsCaseIds(): Promise<string[]> {
-    // Returns an array of Case IDs from the results list
-    const caseIdElements = await this.page.locator('[data-testid="case-id-cell"]').allTextContents();
-    return caseIdElements.map(text => text.trim());
+  // Get the text content (e.g. "2 cases found")
+  const text = await element.textContent();
+
+  // Extract only the number using regex
+  const numberMatch = text?.match(/\d+/);
+  casesCount = numberMatch ? parseInt(numberMatch[0], 10) : 0;
+
+  console.log('Extracted number:', casesCount);
+
+  // Example assertion
+  expect(casesCount).toBeGreaterThan(0);
+
   }
   async isResultsListDisplayed(): Promise<boolean> {
     return this.page.locator('[data-testid="explore-data-results-list"]').isVisible();
@@ -174,8 +278,15 @@ export class ExploreDataPage extends BasePage {
   }
 
   async enterSiteId(siteId: string) {
-    // Fill the Site ID input field
-    await this.page.getByTestId('site-id-input').fill(siteId);
+    // Click the custom dropdown to open options
+    const customSelectBox = this.page.locator('.custom-select-box');
+    await customSelectBox.waitFor({ state: 'visible' });
+    await customSelectBox.click();
+    
+    // Wait for the dropdown options to appear and click the siteId option
+    const option = this.page.locator('text=' + siteId);
+    await option.waitFor({ state: 'visible' });
+    await option.click();
   }
 
   async clickSearchButton() {
@@ -189,21 +300,45 @@ export class ExploreDataPage extends BasePage {
   }
 
   async getSearchResults(): Promise<Array<{ siteId: string }>> {
-    // Extracts search results from the table
-    // (Assume each row has data-site-id attribute or similar)
-    const rows = await this.page.locator('[data-testid="search-result-row"]').elementHandles();
-    const results = [];
-    for (const row of rows) {
-      const siteId = await row.getAttribute('data-site-id');
-      if (siteId !== null) {
-        results.push({ siteId });
-      }
-    }
+    // Extracts Site IDs from the first column of the results table
+    const siteIdCells = this.page.locator('table.table tbody tr td:nth-child(1)');
+    const texts = await siteIdCells.allTextContents();
+    const results = texts
+      .map(t => t.trim())
+      .filter(t => t.length > 0)
+      .map(siteId => ({ siteId }));
     return results;
   }
 
   async isDataAnalysisSectionVisible(): Promise<boolean> {
     // Checks if the data analysis section is visible
     return await this.page.getByTestId('data-analysis-section').isVisible();
+  }
+  /**
+   * Return an array of Case IDs currently displayed in the results table.
+   * Case IDs are in the second column (index 1) of each table row.
+   */
+  async getResultsCaseIds(): Promise<string[]> {
+    // Select the second <td> in each row (Case ID column)
+    const caseIdCells = this.page.locator('table.table tbody tr td:nth-child(2)');
+    const texts = await caseIdCells.allTextContents();
+    const caseIds = texts.map(t => t.trim()).filter(t => t.length > 0);
+    return caseIds;
+  }
+
+  /**
+   * Helper that checks whether a specific Case ID exists in the current results.
+   * Returns true/false so the test can assert as needed.
+   */
+  async hasCaseId(targetCaseId: string): Promise<boolean> {
+    const caseIds = await this.getResultsCaseIds();
+    return caseIds.includes(targetCaseId);
+  }
+
+  async clickOnFilters(Locator:string) {
+    const caseIdButton = this.page.locator(`button:has-text("${Locator}")`).filter({ has: this.page.locator('[class*="filter-button"]') });
+    await caseIdButton.waitFor({ state: 'visible' });
+    await caseIdButton.click();
+    
   }
 }

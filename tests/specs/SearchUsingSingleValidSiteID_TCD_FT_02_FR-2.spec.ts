@@ -4,7 +4,7 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../../src/pages/login.page';
 import testDataArray from '../../test-data/Staging/search-using-single-valid-site-id-data.json';
-import {ENV} from '../../src/config/env.ts';
+import {ENV} from '../../src/config/env';
 const testData = testDataArray;
 // NOTE: If an ExploreDataPage page object does not exist, it should be created in src/pages/explore-data.page.ts
 // For this test, we will assume it exists and exposes the necessary methods.
