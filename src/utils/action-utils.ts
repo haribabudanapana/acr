@@ -13,15 +13,38 @@ export class ActionUtils {
         input: string | Locator,
         options: any = {}
     ): Promise<Locator> {
+        let locator: Locator;
+        if (typeof input === 'string') {
+            const page = options.page;
+            if (!page) {
+                throw new Error('Page is required when locator is provided as a string');
+            }
+            locator = page.locator(input);
+        } else {
+            locator = input;
+        }
+        // Wait for element to be visible using Playwright's built-in wait
+        await locator.waitFor({ state: 'visible', timeout: options.timeout || 30000 });
+        return locator;
+    }
+
+    /**
+     * Wait for an element to be visible and return its Locator.
+     * Useful when callers only need to ensure visibility before proceeding.
+     */
+    static async waitForElementToBeVisible(input: string | Locator, options: any = {}): Promise<Locator> {
         const page = options.page;
         if (!page) {
             throw new Error('Page is required for locator operations');
         }
-
         const locator = typeof input === 'string' ? page.locator(input) : input;
-        // Wait for element to be visible using Playwright's built-in wait
         await locator.waitFor({ state: 'visible', timeout: options.timeout || 30000 });
         return locator;
+    }
+
+    // Alias with the exact name requested by caller code
+    static async waitForElementTobevisible(input: string | Locator, options: any = {}): Promise<Locator> {
+        return this.waitForElementToBeVisible(input, options);
     }
 
     // ==================== CLICK ACTIONS ====================
