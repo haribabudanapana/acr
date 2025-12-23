@@ -10,13 +10,13 @@
       "User is on the Explore Data Page"
     ],
     "searchInput": {
-      "caseId": "C123"
+      "caseId": "4709-1"
     },
     "expectedResults": {
       "subjectsFound": 1,
       "subjectList": [
         {
-          "caseId": "C123",
+          "caseId": "4709-1",
           "subjectId": "S001",
           "firstName": "John",
           "lastName": "Doe",

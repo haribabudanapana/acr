@@ -9,7 +9,7 @@
     "User is on the Explore Data Page"
   ],
   "searchCriteria": {
-    "siteId": "SITE123456", 
+    "siteId": "6001-Neurostudies, Inc - ALZ-NET", 
     "siteIdEdgeCases": [
       "SITE000001", 
       "SITE999999", 
@@ -36,8 +36,8 @@
   "testDataItems": [
     {
       "label": "Valid Site ID",
-      "value": "SITE123456",
-      "expectedResult": "Results displayed for SITE123456"
+      "value": "6001-Neurostudies, Inc - ALZ-NET",
+      "expectedResult": "Results displayed for 6001-Neurostudies, Inc - ALZ-NET"
     },
     {
       "label": "Lowest Boundary Site ID",

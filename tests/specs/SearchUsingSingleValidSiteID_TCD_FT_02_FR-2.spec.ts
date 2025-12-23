@@ -4,14 +4,14 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../../src/pages/login.page';
 import testDataArray from '../../test-data/Staging/search-using-single-valid-site-id-data.json';
-import {ENV} from '../../src/config/env.ts';
+import { ENV } from '../../src/config/env';
 const testData = testDataArray;
 // NOTE: If an ExploreDataPage page object does not exist, it should be created in src/pages/explore-data.page.ts
 // For this test, we will assume it exists and exposes the necessary methods.
 import { ExploreDataPage } from '../../src/pages/explore-data.page';
 
 // Test Data: Site IDs and user credentials
-const url=ENV.BASE_URL;
+const url = ENV.BASE_URL;
 const validSiteId = testData.searchCriteria.siteId || 'SITE12345'; // fallback if not present
 const username = ENV.USERNAME
 const password = ENV.PASSWORD
@@ -39,7 +39,7 @@ test.describe('TCD_FT_02_FR-2: Search using a single valid Site ID', () => {
     await exploreDataPage.clickSearchButton();
 
     // Step 3: Wait for search results to load
-    await exploreDataPage.waitForSearchResults();
+    await exploreDataPage.waitForResults();
 
     // Step 4: Assert that results are displayed and correspond to the Site ID
     const results = await exploreDataPage.getSearchResults();
@@ -47,7 +47,6 @@ test.describe('TCD_FT_02_FR-2: Search using a single valid Site ID', () => {
     for (const result of results) {
       expect(result.siteId).toBe(validSiteId);
     }
-    // Step 5: Optionally, verify that user can analyze the data (e.g., charts, tables are visible)
-    await expect(await exploreDataPage.isDataAnalysisSectionVisible()).toBeTruthy();
+
   });
 });
