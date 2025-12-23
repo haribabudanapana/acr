@@ -21,7 +21,7 @@ test.describe('TCD_FT_01_FR-1: Search using a single valid Case ID', () => {
     await loginPage.login(username,password);
     // Navigate to Explore Data Page
     await exploreDataPage.goto();
-    await expect(exploreDataPage.isLoaded()).resolves.toBeTruthy();
+    await exploreDataPage.toBeVisible();
   });
 
   test('should display correct subjects when searching by a valid Case ID', async ({ page }) => {

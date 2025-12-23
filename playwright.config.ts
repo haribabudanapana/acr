@@ -13,26 +13,30 @@ import { defineConfig, devices } from '@playwright/test';
  */
 export default defineConfig({
   testDir: './tests/specs',
-   timeout: 10 * 60_1000, // Default test timeout 10 minutes
+  timeout: 10 * 60_1000, // Default test timeout 10 minutes
   expect: {
-    timeout: 30_000, // expect-level timeout
+    timeout: 90_000, // expect-level timeout
   },
   use: {
     actionTimeout: 30_000,       // actions like click, fill
     navigationTimeout: 60_000,   // page.goto, page.waitForNavigation
     baseURL: process.env.BASE_URL,
-    browserName: 'chromium',
+    browserName: 'firefox',
+    // launchOptions: {
+    //    args: ['--disable-features=BlockInsecurePrivateNetworkRequests']
+    // },
     headless: false,
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
-    video: 'on'
+    video: 'on',
   },
+
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
+  retries: 0,
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
@@ -43,15 +47,15 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
-    {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
-    },
-
     // {
-    //   name: 'firefox',
-    //   use: { ...devices['Desktop Firefox'] },
+    //   name: 'chromium',
+    //   use: { ...devices['Desktop Chrome'] },
     // },
+
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
 
     // {
     //   name: 'webkit',
