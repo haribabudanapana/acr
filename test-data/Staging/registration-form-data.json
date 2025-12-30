@@ -1,0 +1,18 @@
+{
+  "siteName": "Test Site A",
+  "siteAddress": "123 Main St, Springfield, USA",
+  "siteType": "Hospital",
+  "contactEmail": "admin@testsitea.com",
+  "contactPhone": "555-123-4567",
+  "additionalFields": {
+    "principal-investigator": "Dr. John Doe",
+    "number-of-beds": "150",
+    "site-capacity": "High",
+    "has-ethics-approval": "Yes",
+    "start-date": "2024-07-01",
+    "end-date": "2025-06-30",
+    "region": "North-East",
+    "country": "USA",
+    "state": "Illinois"
+  }
+}
