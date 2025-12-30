@@ -1,0 +1,135 @@
+// Test data for: Complete and Submit the Registration Form (TCD_FT_02_FR-2)
+[
+  {
+    "testCaseId": "TCD_FT_02_FR-2",
+    "description": "Valid data - all required fields populated with typical values.",
+    "siteName": "Central City Hospital",
+    "siteAddress": "123 Main St, Central City, NY 10001",
+    "siteType": "Hospital",
+    "principalInvestigator": {
+      "firstName": "Alice",
+      "lastName": "Smith",
+      "email": "alice.smith@centralcityhosp.org",
+      "phone": "+1-555-123-4567"
+    },
+    "numberOfBeds": 250,
+    "hasIrbApproval": true,
+    "irbApprovalDate": "2024-06-01",
+    "contactPerson": {
+      "name": "Bob Johnson",
+      "email": "bob.johnson@centralcityhosp.org",
+      "phone": "+1-555-987-6543"
+    },
+    "siteCapacity": 1000,
+    "expectedEnrollment": 150,
+    "notes": "Site has previous experience with similar studies.",
+    "attachments": [
+      "irb_approval_letter.pdf",
+      "site_profile.docx"
+    ]
+  },
+  {
+    "testCaseId": "TCD_FT_02_FR-2",
+    "description": "Edge case - minimum required data, no optional fields.",
+    "siteName": "A",
+    "siteAddress": "1 B St, Z City, ZZ 00001",
+    "siteType": "Clinic",
+    "principalInvestigator": {
+      "firstName": "B",
+      "lastName": "C",
+      "email": "b.c@zclinic.org",
+      "phone": ""
+    },
+    "numberOfBeds": 1,
+    "hasIrbApproval": false,
+    "irbApprovalDate": null,
+    "contactPerson": {
+      "name": "D E",
+      "email": "d.e@zclinic.org",
+      "phone": ""
+    },
+    "siteCapacity": 1,
+    "expectedEnrollment": 1,
+    "notes": "",
+    "attachments": []
+  },
+  {
+    "testCaseId": "TCD_FT_02_FR-2",
+    "description": "Boundary case - maximum field lengths and values.",
+    "siteName": "Z".repeat(100),
+    "siteAddress": "9 Longest Possible Address Avenue, Mega City, XX 99999-9999",
+    "siteType": "Research Center",
+    "principalInvestigator": {
+      "firstName": "Maximilianus".repeat(5),
+      "lastName": "Longlastname".repeat(5),
+      "email": "max.longname@researchcenter9999999999999999999999999999999999999.org",
+      "phone": "+1-555-999-9999"
+    },
+    "numberOfBeds": 10000,
+    "hasIrbApproval": true,
+    "irbApprovalDate": "2099-12-31",
+    "contactPerson": {
+      "name": "Y".repeat(100),
+      "email": "contact@researchcenter9999999999999999999999999999999999999.org",
+      "phone": "+1-555-888-8888"
+    },
+    "siteCapacity": 100000,
+    "expectedEnrollment": 100000,
+    "notes": "This is a test for the maximum allowed field lengths and values.",
+    "attachments": [
+      "max_file_1.pdf",
+      "max_file_2.docx",
+      "max_file_3.xlsx"
+    ]
+  },
+  {
+    "testCaseId": "TCD_FT_02_FR-2",
+    "description": "Invalid data - missing required fields.",
+    "siteName": "",
+    "siteAddress": "",
+    "siteType": "",
+    "principalInvestigator": {
+      "firstName": "",
+      "lastName": "",
+      "email": "",
+      "phone": ""
+    },
+    "numberOfBeds": null,
+    "hasIrbApproval": null,
+    "irbApprovalDate": null,
+    "contactPerson": {
+      "name": "",
+      "email": "",
+      "phone": ""
+    },
+    "siteCapacity": null,
+    "expectedEnrollment": null,
+    "notes": "",
+    "attachments": []
+  },
+  {
+    "testCaseId": "TCD_FT_02_FR-2",
+    "description": "Invalid data - invalid email and negative numbers.",
+    "siteName": "Negative Test Clinic",
+    "siteAddress": "-1 Negative Lane, Down City, DC 00000",
+    "siteType": "Clinic",
+    "principalInvestigator": {
+      "firstName": "Test",
+      "lastName": "Negative",
+      "email": "not-an-email",
+      "phone": "not-a-phone"
+    },
+    "numberOfBeds": -5,
+    "hasIrbApproval": false,
+    "irbApprovalDate": null,
+    "contactPerson": {
+      "name": "Negative Person",
+      "email": "bademail@",
+      "phone": "-123"
+    },
+    "siteCapacity": -100,
+    "expectedEnrollment": -10,
+    "notes": "Negative numbers and invalid emails should be rejected.",
+    "attachments": []
+  }
+]
