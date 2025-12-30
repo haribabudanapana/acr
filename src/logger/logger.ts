@@ -14,7 +14,7 @@ export class Logger {
     console.log(`[INFO] ${message}`);
   }
 
-  error(message: string): void {
+  error(message: string, err?: string): void {
     console.error(`[ERROR] ${message}`);
   }
 

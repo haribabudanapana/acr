@@ -1,7 +1,7 @@
-// Test data for TCD_FT_01_FR-1: Access Site Feasibility & Registration Form
 [
   {
     "testCaseId": "TCD_FT_01_FR-1",
+    "url": "https://alznetapp-uat.acr.org/login",
     "description": "Valid Site Admin with RMS role and all dependencies can access the form",
     "preconditions": {
       "userRole": "Site Administrator",
@@ -102,7 +102,7 @@
       ]
     },
     "inputData": {
-      "siteName": "S".repeat(100),
+      "siteName": "S",
       "siteAddress": "456 Boundary St, Edge City, EC 99999",
       "principalInvestigator": "Dr. Bob Edge",
       "contactEmail": "bob.edge@boundary.org",

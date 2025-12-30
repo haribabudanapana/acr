@@ -80,7 +80,7 @@ export class DBUtils {
                 this.allureReporter.addStep(`Database connection failed: ${error.message}`);
                 throw new Error(`Failed to connect: ${error.message}`);
             } else {
-                this.logger.error('Unexpected error during DB connection:', error);
+                this.logger.error('Unexpected error during DB connection:', String(error));
                 this.allureReporter.addStep('Database connection failed: Unexpected error');
                 throw new Error('Failed to connect: Unexpected error');
             }
@@ -117,7 +117,7 @@ export class DBUtils {
                 this.allureReporter.addStep(`Query execution failed: ${error.message}`);
                 throw new Error(`Query execution failed: ${error.message}`);
             } else {
-                this.logger.error('Unexpected error during query execution:', error);
+                this.logger.error('Unexpected error during query execution:', String(error));
                 this.allureReporter.addStep('Query execution failed: Unexpected error');
                 throw new Error('Query execution failed: Unexpected error');
             }
@@ -141,7 +141,7 @@ export class DBUtils {
                     this.logger.error('Error closing DB connection:', error.message);
                     this.allureReporter.addStep(`Error closing connection: ${error.message}`);
                 } else {
-                    this.logger.error('Unexpected error while closing DB connection:', error);
+                    this.logger.error('Unexpected error while closing DB connection:', String(error));
                     this.allureReporter.addStep('Error closing connection: Unexpected error');
                 }
             }

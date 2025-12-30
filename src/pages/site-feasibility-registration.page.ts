@@ -10,27 +10,28 @@ export class SiteFeasibilityRegistrationPage extends BasePage {
   /**
    * Navigates to the Site Feasibility & Registration Form from the public-facing website.
    */
-  async navigateToForm(): Promise<void> {
-    // Assumes a method to navigate from the home page or via direct URL
-    // e.g., await this.page.goto('/site-feasibility-registration');
-    // Replace with actual navigation logic if needed
-    await this.page.goto('/site-feasibility-registration');
+  async navigateToSiteRegisterForm(): Promise<Page> {
+    await this.page.waitForLoadState('domcontentloaded');
+
+    // Wait for the new page to open
+    const [newPage] = await Promise.all([
+      this.page.context().waitForEvent('page'),
+      this.page.getByRole('button', { name: 'REGISTER MY SITE' }).click()
+    ]);
+
+    await newPage.waitForLoadState('domcontentloaded');
+    return newPage;
   }
 
   /**
    * Verifies that the Site Feasibility & Registration Form is visible.
    */
-  async isFormDisplayed(): Promise<boolean> {
-    // Replace '#site-feasibility-registration-form' with actual form selector if different
-    return await this.page.isVisible('#site-feasibility-registration-form');
-  }
-
-  /**
-   * Optionally, verify that access attempt is logged (stub for future extension)
-   */
-  async isAccessLogged(): Promise<boolean> {
-    // Implement logic to verify access logging if UI feedback or API is available
-    // For now, return true as a placeholder
+  async isFormDisplayed(page: Page): Promise<boolean> {
+    await page.waitForLoadState('domcontentloaded');
+    await this.waitForPageLoad(30000);
+    const siteRegisterButton = page.getByText('Site Feasibility &');
+    await siteRegisterButton.waitFor({ state: 'visible', timeout: 30000 });
     return true;
   }
+
 }

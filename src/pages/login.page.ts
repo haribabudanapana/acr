@@ -20,7 +20,7 @@ export class LoginPage extends BasePage {
 
   }
 
-  async goto(url: string): Promise<void> {
+  async goto(url: string|any): Promise<void> {
     await test.step('Launch the application', async () => {
       await this.page.goto(url, { waitUntil: 'domcontentloaded', timeout: 90000 });
     });
@@ -34,6 +34,16 @@ export class LoginPage extends BasePage {
       await ActionUtils.click(this.loginBtn);
       await this.passwordField.waitFor({ state: 'visible' });
       await ActionUtils.fill(this.passwordField, password);
+      await ActionUtils.click(this.loginBtn);
+
+      await this.loadingIcon.waitFor({ state: 'hidden' });
+    });
+  }
+  async loginWithUserName(username: string): Promise<void> {  
+    await test.step('Login to Application', async () => {
+      await ActionUtils.click(this.loginButton);
+      await this.usernameField.waitFor({ state: 'visible' });;
+      await ActionUtils.fill(this.usernameField, username);
       await ActionUtils.click(this.loginBtn);
 
       await this.loadingIcon.waitFor({ state: 'hidden' });

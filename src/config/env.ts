@@ -4,5 +4,7 @@ export const ENV = {
   USERNAME: 'acrstaff121@gmail.com',
   PASSWORD: 'Password@123$',
   BROWSER: 'chrome',
-  OS: 'windows'
+  OS: 'windows',
+  APPUSERNAME: 'siteuseralznet@gmail.com', 
+  APPPASSWORD: 'SU2025@dashboard'
 };
