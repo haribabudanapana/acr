@@ -1,0 +1,162 @@
+// Test data for TCD_FT_01_FR-1: Access Site Feasibility & Registration Form
+[
+  {
+    "testCaseId": "TCD_FT_01_FR-1",
+    "description": "Valid Site Admin with RMS role and all dependencies can access the form",
+    "preconditions": {
+      "userRole": "Site Administrator",
+      "roles": ["RMS"],
+      "dependencies": ["ALZ-123", "ALZ-124", "ALZ-125"],
+      "isLoggedIn": true
+    },
+    "formAccess": {
+      "url": "https://acr-public-site.example.com/site-feasibility-registration",
+      "expectedTitle": "Site Feasibility & Registration Form",
+      "expectedElements": [
+        "#site-name-input",
+        "#site-address-input",
+        "#principal-investigator-input",
+        "#contact-email-input",
+        "#submit-button"
+      ]
+    },
+    "inputData": {
+      "siteName": "Alzheimer's Research Center",
+      "siteAddress": "123 Memory Lane, Boston, MA 02115",
+      "principalInvestigator": "Dr. Alice Smith",
+      "contactEmail": "alice.smith@alzresearch.org",
+      "phoneNumber": "+1-617-555-1234",
+      "numberOfBeds": 250,
+      "hasIRBApproval": true,
+      "irbApprovalDate": "2024-05-15",
+      "siteType": "Academic Medical Center",
+      "studyInterest": ["ALZ-123", "ALZ-124"],
+      "comments": "Site is fully equipped for early phase clinical trials.",
+      "submissionDate": "2024-06-01T10:00:00Z"
+    },
+    "expectedResult": "Site Feasibility & Registration Form is displayed.",
+    "postConditions": {
+      "formAccessLogged": true
+    }
+  },
+  {
+    "testCaseId": "TCD_FT_01_FR-1",
+    "description": "Site Admin missing RMS role cannot access the form",
+    "preconditions": {
+      "userRole": "Site Administrator",
+      "roles": [],
+      "dependencies": ["ALZ-123", "ALZ-124", "ALZ-125"],
+      "isLoggedIn": true
+    },
+    "formAccess": {
+      "url": "https://acr-public-site.example.com/site-feasibility-registration",
+      "expectedTitle": null,
+      "expectedElements": [],
+      "expectedError": "Access Denied: RMS role required"
+    },
+    "inputData": {},
+    "expectedResult": "Access Denied error is displayed.",
+    "postConditions": {
+      "formAccessLogged": false
+    }
+  },
+  {
+    "testCaseId": "TCD_FT_01_FR-1",
+    "description": "Site Admin missing dependency ALZ-124 cannot access the form",
+    "preconditions": {
+      "userRole": "Site Administrator",
+      "roles": ["RMS"],
+      "dependencies": ["ALZ-123", "ALZ-125"],
+      "isLoggedIn": true
+    },
+    "formAccess": {
+      "url": "https://acr-public-site.example.com/site-feasibility-registration",
+      "expectedTitle": null,
+      "expectedElements": [],
+      "expectedError": "Access Denied: Missing dependency ALZ-124"
+    },
+    "inputData": {},
+    "expectedResult": "Access Denied error is displayed.",
+    "postConditions": {
+      "formAccessLogged": false
+    }
+  },
+  {
+    "testCaseId": "TCD_FT_01_FR-1",
+    "description": "Boundary value: site name at max length (100 chars)",
+    "preconditions": {
+      "userRole": "Site Administrator",
+      "roles": ["RMS"],
+      "dependencies": ["ALZ-123", "ALZ-124", "ALZ-125"],
+      "isLoggedIn": true
+    },
+    "formAccess": {
+      "url": "https://acr-public-site.example.com/site-feasibility-registration",
+      "expectedTitle": "Site Feasibility & Registration Form",
+      "expectedElements": [
+        "#site-name-input",
+        "#site-address-input",
+        "#principal-investigator-input",
+        "#contact-email-input",
+        "#submit-button"
+      ]
+    },
+    "inputData": {
+      "siteName": "S".repeat(100),
+      "siteAddress": "456 Boundary St, Edge City, EC 99999",
+      "principalInvestigator": "Dr. Bob Edge",
+      "contactEmail": "bob.edge@boundary.org",
+      "phoneNumber": "+1-800-555-0000",
+      "numberOfBeds": 0,
+      "hasIRBApproval": false,
+      "irbApprovalDate": null,
+      "siteType": "Community Hospital",
+      "studyInterest": [],
+      "comments": "Testing max length for site name.",
+      "submissionDate": "2024-06-01T11:00:00Z"
+    },
+    "expectedResult": "Form accepts site name at max length.",
+    "postConditions": {
+      "formAccessLogged": true
+    }
+  },
+  {
+    "testCaseId": "TCD_FT_01_FR-1",
+    "description": "Edge case: invalid email format",
+    "preconditions": {
+      "userRole": "Site Administrator",
+      "roles": ["RMS"],
+      "dependencies": ["ALZ-123", "ALZ-124", "ALZ-125"],
+      "isLoggedIn": true
+    },
+    "formAccess": {
+      "url": "https://acr-public-site.example.com/site-feasibility-registration",
+      "expectedTitle": "Site Feasibility & Registration Form",
+      "expectedElements": [
+        "#site-name-input",
+        "#site-address-input",
+        "#principal-investigator-input",
+        "#contact-email-input",
+        "#submit-button"
+      ]
+    },
+    "inputData": {
+      "siteName": "Invalid Email Site",
+      "siteAddress": "789 Invalid Ave, Mistake City, MC 12345",
+      "principalInvestigator": "Dr. Carol Wrong",
+      "contactEmail": "invalid-email-format",
+      "phoneNumber": "+1-800-555-9999",
+      "numberOfBeds": 10,
+      "hasIRBApproval": true,
+      "irbApprovalDate": "2024-05-10",
+      "siteType": "Private Clinic",
+      "studyInterest": ["ALZ-123"],
+      "comments": "Testing invalid email format.",
+      "submissionDate": "2024-06-01T12:00:00Z"
+    },
+    "expectedResult": "Form displays email validation error.",
+    "postConditions": {
+      "formAccessLogged": false
+    }
+  }
+]
