@@ -1,0 +1,71 @@
+{
+  "testCaseId": "TCD_FT_03_FR-3",
+  "testCaseName": "Site Administrator accesses saved draft for editing",
+  "objective": "Validate that a Site Administrator can access a draft registration form for continued editing.",
+  "preconditions": {
+    "userRole": "Site Administrator",
+    "login": {
+      "username": "siteadmin_acr@example.com",
+      "password": "ValidPassword123!"
+    },
+    "draftExists": true
+  },
+  "draftData": {
+    "draftId": "DRAFT-1001",
+    "formFields": {
+      "siteName": "Test Site Alpha",
+      "siteId": "SITE-001",
+      "principalInvestigator": "Dr. Jane Doe",
+      "contactEmail": "jane.doe@testsite.com",
+      "contactPhone": "+1-555-123-4567",
+      "studyTitle": "Feasibility Study for Alpha",
+      "studyId": "STUDY-ALPHA-2024",
+      "enrollmentTarget": 100,
+      "startDate": "2024-06-01",
+      "endDate": "2024-12-31",
+      "status": "Draft",
+      "lastEditedBy": "siteadmin_acr@example.com",
+      "lastEditedOn": "2024-06-10T14:30:00Z",
+      "notes": "Initial draft created for feasibility review."
+    }
+  },
+  "editData": {
+    "fieldsToUpdate": {
+      "enrollmentTarget": 120,
+      "notes": "Updated enrollment target after review."
+    },
+    "edgeCases": [
+      {
+        "enrollmentTarget": 0,
+        "notes": "Testing lower boundary for enrollment target."
+      },
+      {
+        "enrollmentTarget": 10000,
+        "notes": "Testing upper boundary for enrollment target."
+      },
+      {
+        "notes": ""
+      },
+      {
+        "notes": "!@#$%^&*()_+|~={}[]:;'<>,.?/"
+      }
+    ]
+  },
+  "locators": {
+    "draftList": "#draft-list-table",
+    "editButton": ".edit-draft-btn",
+    "formField_siteName": "#site-name-input",
+    "formField_enrollmentTarget": "#enrollment-target-input",
+    "saveButton": "#save-draft-btn"
+  },
+  "expectedResult": "The draft is accessible for editing, and changes are saved successfully.",
+  "postConditions": {
+    "draftUpdated": true,
+    "updatedFields": [
+      "enrollmentTarget",
+      "notes"
+    ]
+  },
+  "priority": "Medium",
+  "type": "Functional Testing (Positive test case)"
+}

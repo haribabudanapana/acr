@@ -90,4 +90,79 @@ export class SiteFeasibilityRegistrationFormPage extends BasePage {
       await this.page.waitForLoadState('networkidle');
     });
   }
+
+  /**
+   * Accesses a saved draft registration form for editing, makes changes, and saves the updated draft.
+   * This method encapsulates the end-to-end flow for the test case: Site Administrator accesses saved draft for editing.
+   * Preconditions: Site Administrator is logged in and at least one draft exists.
+   * @param draftIdentifier - Unique identifier (e.g., draft name or id) to select the draft
+   * @param updatedFormData - Object containing updated form field values
+   */
+  async accessAndEditSavedDraft(draftIdentifier: string, updatedFormData: Record<string, string>): Promise<void> {
+    await test.step('Navigate to Drafts section', async () => {
+      const draftsMenu = this.page.locator('locator("<PLACEHOLDER_drafts_menu>")'); // TODO: Replace with actual locator
+      await draftsMenu.waitFor({ state: 'visible', timeout: 10000 });
+      await ActionUtils.click(draftsMenu);
+      await this.page.waitForLoadState('networkidle');
+    });
+
+    await test.step('Select existing draft from the list', async () => {
+      const draftRow = this.page.locator(`locator("<PLACEHOLDER_draft_row_" + draftIdentifier + ">")`); // TODO: Replace with actual locator
+      await draftRow.waitFor({ state: 'visible', timeout: 10000 });
+      await ActionUtils.click(draftRow);
+      await this.page.waitForLoadState('networkidle');
+    });
+
+    await test.step('Verify draft form is loaded for editing', async () => {
+      const draftFormContainer = this.page.locator('locator("<PLACEHOLDER_draft_form_container>")'); // TODO: Replace with actual locator
+      await draftFormContainer.waitFor({ state: 'visible', timeout: 10000 });
+      // Optionally, add assertion here if using expect
+    });
+
+    await test.step('Edit the draft by updating form fields', async () => {
+      for (const [field, value] of Object.entries(updatedFormData)) {
+        const fieldLocator = this.page.locator(`locator("<PLACEHOLDER_draft_form_field_${field}>")`); // TODO: Replace with actual locator
+        await fieldLocator.waitFor({ state: 'visible', timeout: 5000 });
+        await ActionUtils.fill(fieldLocator, value);
+      }
+    });
+
+    await test.step('Save the updated draft', async () => {
+      const saveDraftButton = this.page.locator('locator("<PLACEHOLDER_save_draft_button>")'); // TODO: Replace with actual locator
+      await saveDraftButton.waitFor({ state: 'visible', timeout: 5000 });
+      await ActionUtils.click(saveDraftButton);
+      await this.page.waitForLoadState('networkidle');
+    });
+  }
+
+  /**
+   * Validates that the draft is accessible for editing and changes are saved successfully.
+   * @param draftIdentifier - Unique identifier to select the draft
+   * @param expectedFormData - Object containing expected field values after edit
+   * @returns {Promise<boolean>} True if all updated fields match expected values
+   */
+  async validateDraftUpdated(draftIdentifier: string, expectedFormData: Record<string, string>): Promise<boolean> {
+    let allFieldsMatch = true;
+    await test.step('Re-open the edited draft for validation', async () => {
+      const draftsMenu = this.page.locator('locator("<PLACEHOLDER_drafts_menu>")'); // TODO: Replace with actual locator
+      await draftsMenu.waitFor({ state: 'visible', timeout: 10000 });
+      await ActionUtils.click(draftsMenu);
+      await this.page.waitForLoadState('networkidle');
+      const draftRow = this.page.locator(`locator("<PLACEHOLDER_draft_row_" + draftIdentifier + ">")`); // TODO: Replace with actual locator
+      await draftRow.waitFor({ state: 'visible', timeout: 10000 });
+      await ActionUtils.click(draftRow);
+      await this.page.waitForLoadState('networkidle');
+    });
+    await test.step('Validate updated draft fields', async () => {
+      for (const [field, expectedValue] of Object.entries(expectedFormData)) {
+        const fieldLocator = this.page.locator(`locator("<PLACEHOLDER_draft_form_field_${field}>")`); // TODO: Replace with actual locator
+        await fieldLocator.waitFor({ state: 'visible', timeout: 5000 });
+        const actualValue = await fieldLocator.inputValue();
+        if (actualValue !== expectedValue) {
+          allFieldsMatch = false;
+        }
+      }
+    });
+    return allFieldsMatch;
+  }
 }
