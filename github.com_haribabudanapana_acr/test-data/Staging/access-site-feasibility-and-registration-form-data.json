@@ -1,0 +1,43 @@
+[
+  {
+    "testCaseId": "TCD_FT_01_FR-1",
+    "description": "Verify that the Site Administrator with RMS role and required dependencies can access the Site Feasibility & Registration Form from the public-facing website.",
+    "preconditions": {
+      "userRole": "Site Administrator",
+      "roles": ["RMS"],
+      "dependencies": ["ALZ-123", "ALZ-124", "ALZ-125"],
+      "isLoggedIn": true
+    },
+    "formAccess": {
+      "url": "https://acr-public-site.example.com/site-feasibility-registration",
+      "expectedTitle": "Site Feasibility & Registration Form",
+      "expectedElements": [
+        "#site-name-input",
+        "#site-address-input",
+        "#principal-investigator-input",
+        "#contact-email-input",
+        "#contact-phone-input",
+        "#irb-approval-date-input",
+        "#site-type-select",
+        "#study-interest-checkbox-group",
+        "#submit-button"
+      ],
+      "expectedError": null
+    },
+    "inputData": {
+      "siteName": "Alzheimer's Research Center",
+      "siteAddress": "123 Memory Lane, Boston, MA 02115",
+      "principalInvestigator": "Dr. Alice Smith",
+      "contactEmail": "alice.smith@alzresearch.org",
+      "contactPhone": "+1-617-555-1234",
+      "irbApprovalDate": "2024-05-15",
+      "siteType": "Academic Medical Center",
+      "studyInterest": ["ALZ-123", "ALZ-124", "ALZ-125"],
+      "submissionDate": "2024-06-01T10:00:00Z"
+    },
+    "expectedResult": "Site Feasibility & Registration Form is displayed.",
+    "postConditions": {
+      "formAccessLogged": true
+    }
+  }
+]
