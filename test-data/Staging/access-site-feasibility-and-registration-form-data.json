@@ -158,5 +158,42 @@
     "postConditions": {
       "formAccessLogged": false
     }
+  },
+  {
+    "testCaseId": "TCD_FT_01_FR-1",
+    "description": "FR-1: Imaging Facility Administrator can access the registration form from the public-facing website",
+    "preconditions": {
+      "userRole": "Imaging Facility Administrator",
+      "hasActiveACRLogin": true,
+      "roles": ["RMS"],
+      "isLoggedIn": true,
+      "hasRegistrationAccessRole": true
+    },
+    "acrCredentials": {
+      "username": "acr_ifadmin_testuser",
+      "password": "TestPassword123!"
+    },
+    "testSteps": [
+      "1. Log into the system using valid ACR credentials.",
+      "2. Navigate to the registration section of the website.",
+      "3. Click on the link to access the Imaging Facility Registration Form."
+    ],
+    "formAccess": {
+      "url": "https://acr-public-site.example.com/site-feasibility-registration",
+      "expectedTitle": "Imaging Facility Registration Form",
+      "expectedElements": [
+        "#site-name-input",
+        "#site-address-input",
+        "#principal-investigator-input",
+        "#contact-email-input",
+        "#submit-button"
+      ]
+    },
+    "expectedResult": "The Imaging Facility Registration Form is displayed successfully.",
+    "postConditions": {
+      "userRemainsOnRegistrationPage": true
+    },
+    "priority": "High",
+    "type": "Functional"
   }
 ]
